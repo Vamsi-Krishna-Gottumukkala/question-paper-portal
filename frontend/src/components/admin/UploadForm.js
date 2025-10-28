@@ -30,6 +30,7 @@ function UploadForm({ filters }) {
         setIsError(false);
         try {
             const res = await uploadPaper(formData);
+            setMessage(`Upload Successful! URL: ${res.data.url}`);
             setMessage(`Upload Successful!`);
             setIsError(false);
             // Clear form
