@@ -1,74 +1,88 @@
-// components/student/FilterForm.js
+// frontend/src/components/student/FilterForm.js
 import React, { useState } from 'react';
+import { FaSearch, FaRedo } from 'react-icons/fa';
 
 function FilterForm({ filters, onSearch }) {
-    const [searchParams, setSearchParams] = useState({
-        branch_id: '',
-        year: '',
-        semester: '',
-        subject_id: ''
+  const [searchParams, setSearchParams] = useState({
+    branch_id: '',
+    year: '',
+    semester: '',
+    subject_name: '',
+  });
+
+  const handleSearchChange = (e) => {
+    setSearchParams({
+      ...searchParams,
+      [e.target.name]: e.target.value
     });
+  };
 
-    const handleSearchChange = (e) => {
-        setSearchParams({
-            ...searchParams,
-            [e.target.name]: e.target.value
-        });
-    };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    onSearch(searchParams);
+  };
 
-    // You could make the subject dropdown dynamic
-    // For now, we show all subjects
-    const filteredSubjects = filters.subjects.filter(s => {
-        if (searchParams.branch_id && s.branch_id !== parseInt(searchParams.branch_id)) return false;
-        if (searchParams.year && s.year !== parseInt(searchParams.year)) return false;
-        if (searchParams.semester && s.semester !== parseInt(searchParams.semester)) return false;
-        return true;
+  const handleReset = () => {
+    setSearchParams({
+      branch_id: '',
+      year: '',
+      semester: '',
+      subject_name: '',
     });
+    onSearch({}); // Reset search
+  };
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        onSearch(searchParams);
-    };
-
-    return (
-        <div className="card">
-            <h2>Student Search</h2>
-            <form onSubmit={onSubmit}>
-                <label>Branch:</label>
-                <select name="branch_id" value={searchParams.branch_id} onChange={handleSearchChange}>
-                    <option value="">Select Branch</option>
-                    {filters.branches.map(b => (
-                        <option key={b.branch_id} value={b.branch_id}>{b.branch_name}</option>
-                    ))}
-                </select>
-
-                <label>Year:</label>
-                <select name="year" value={searchParams.year} onChange={handleSearchChange}>
-                    <option value="">Select Year</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
-
-                <label>Semester:</label>
-                <select name="semester" value={searchParams.semester} onChange={handleSearchChange}>
-                    <option value="">Select Semester</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
-
-                <label>Subject:</label>
-                <select name="subject_id" value={searchParams.subject_id} onChange={handleSearchChange}>
-                    <option value="">Select Subject (Optional)</option>
-                    {filteredSubjects.map(s => (
-                        <option key={s.subject_id} value={s.subject_id}>{s.subject_name}</option>
-                    ))}
-                </select>
-                <button type="submit">Search</button>
-            </form>
+  return (
+    <form onSubmit={onSubmit}>
+      <div className="form-grid">
+        <div className="form-group">
+          <label>Branch</label>
+          <select name="branch_id" value={searchParams.branch_id} onChange={handleSearchChange}>
+            <option value="">All Branches</option>
+            {filters.branches.map(b => (
+              <option key={b.branch_id} value={b.branch_id}>{b.branch_name}</option>
+            ))}
+          </select>
         </div>
-    );
+        <div className="form-group">
+          <label>Year</label>
+          <select name="year" value={searchParams.year} onChange={handleSearchChange}>
+            <option value="">All Years</option>
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Semester</label>
+          <select name="semester" value={searchParams.semester} onChange={handleSearchChange}>
+            <option value="">All Semesters</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Subject Name</label>
+          <input
+            type="text"
+            name="subject_name"
+            placeholder="e.g., Data Structures"
+            value={searchParams.subject_name}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: '15px', marginTop: '25px' }}>
+        <button type="submit" className="button button-primary" style={{ flex: 1 }}>
+          <FaSearch /> Search
+        </button>
+        <button type="button" onClick={handleReset} className="button button-secondary">
+          <FaRedo /> Reset
+        </button>
+      </div>
+    </form>
+  );
 }
 
 export default FilterForm;
