@@ -1,6 +1,6 @@
 // frontend/src/components/admin/ManagePapersTable.js
 import React, { useState } from 'react';
-import { FaTrash, FaDownload, FaEdit } from 'react-icons/fa';
+import { FaTrash, FaDownload, FaEdit, FaEye } from 'react-icons/fa';
 import { deletePaper } from '../../services/api'; // We need to create this in api.js
 
 function ManagePapersTable({ papers, loading, onDeleteSuccess, onEditClick }) {
@@ -55,30 +55,45 @@ function ManagePapersTable({ papers, loading, onDeleteSuccess, onEditClick }) {
               <td>Year: {paper.year}, Sem: {paper.semester}</td>
               <td>{paper.exam_year || 'N/A'}</td>
               <td style={{ display: 'flex', gap: '10px' }}>
+                
+                {/* --- NEW "VIEW" BUTTON --- */}
                 <a 
-                  href={paper.file_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                  href={paper.file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="button button-secondary"
                   style={{ padding: '8px 12px', fontSize: '14px' }}
+                  title="View Paper"
+                >
+                  <FaEye />
+                </a>
+
+                {/* --- UPDATED "DOWNLOAD" BUTTON --- */}
+                <a 
+                  href={`${process.env.REACT_APP_API_URL}/api/student/download/${paper.paper_id}`}
+                  className="button button-primary"
+                  style={{ padding: '8px 12px', fontSize: '14px' }}
+                  title="Download Paper"
                 >
                   <FaDownload />
                 </a>
                 
-                {/* --- ADD EDIT BUTTON --- */}
+                {/* --- EDIT BUTTON (Unchanged) --- */}
                 <button
-                  onClick={() => onEditClick(paper)} // <-- Call the handler
+                  onClick={() => onEditClick(paper)}
                   className="button button-primary"
                   style={{ padding: '8px 12px', fontSize: '14px', background: 'var(--color-accent-blue)' }}
+                  title="Edit Details"
                 >
                   <FaEdit />
                 </button>
-                {/* --- END EDIT BUTTON --- */}
 
+                {/* --- DELETE BUTTON (Unchanged) --- */}
                 <button 
                   onClick={() => handleDelete(paper.paper_id, paper.file_key)} 
                   className="button button-danger"
                   style={{ padding: '8px 12px', fontSize: '14px' }}
+                  title="Delete Paper"
                 >
                   <FaTrash />
                 </button>

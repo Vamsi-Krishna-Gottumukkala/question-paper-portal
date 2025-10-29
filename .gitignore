@@ -5,4 +5,6 @@
 # Ignore frontend dependencies and secrets
 /frontend/node_modules
 /frontend/.env
+/frontend/.env.development
 /frontend/build
+/frontend/maifest

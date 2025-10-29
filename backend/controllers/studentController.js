@@ -1,5 +1,16 @@
 // controllers/studentController.js
 const db = require('../config/db');
+const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+require('dotenv').config()
+
+
+const s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    }
+});
 
 const searchPapers = async (req, res) => {
     try {
@@ -54,7 +65,51 @@ const getFilters = async (req, res) => {
     }
 };
 
+const downloadPaper = async (req, res) => {
+    try {
+        const { paperId } = req.params;
+        
+        // 1. Get the file key and subject name from the database
+        const [rows] = await db.query(
+            "SELECT p.file_key, s.subject_name FROM question_papers p " +
+            "JOIN subjects s ON p.subject_id = s.subject_id " +
+            "WHERE p.paper_id = ?",
+            [paperId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).send('File not found.');
+        }
+        
+        const fileInfo = rows[0];
+
+        // 2. Set up S3 GetObject command
+        const command = new GetObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: fileInfo.file_key,
+        });
+        
+        // 3. Get the file from S3
+        const s3Response = await s3.send(command);
+
+        // 4. Sanitize the filename for download
+        const filename = `${fileInfo.subject_name.replace(/[^a-z0-9]/gi, '_')}_paper.pdf`;
+        
+        // 5. Set headers to force download
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.setHeader('Content-Type', s3Response.ContentType || 'application/pdf');
+
+        // 6. Stream the file from S3 to the user
+        s3Response.Body.pipe(res);
+
+    } catch (err) {
+        console.error("Download error:", err);
+        res.status(500).send('Error downloading file.');
+    }
+};
+
 module.exports = {
     searchPapers,
-    getFilters
+    getFilters,
+    downloadPaper
 };
