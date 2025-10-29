@@ -1,6 +1,6 @@
 // frontend/src/pages/AuthPage.js
 import React, { useState } from 'react';
-import { FaGraduationCap, FaUserShield, FaUser } from 'react-icons/fa';
+import { FaUserShield, FaUser } from 'react-icons/fa'; // Removed FaCheckCircle
 
 function AuthPage({ onLoginSuccess }) {
   const [isLoginAsAdmin, setIsLoginAsAdmin] = useState(true);
@@ -16,14 +16,14 @@ function AuthPage({ onLoginSuccess }) {
 
     // --- Dummy Login Logic ---
     if (isLoginAsAdmin) {
-      if (email === 'admin.questionpaper@gmail.com' && password === 'adminpass') {
+      if (email === 'admin@questionpaper.com' && password === 'admin123') {
         onLoginSuccess('admin');
       } else {
         setMessage('Invalid Admin credentials.');
         setIsError(true);
       }
     } else {
-      if (email === 'student.test@gmail.com' && password === 'studentpass') {
+      if (email.endsWith('@gvpcdpgc.edu.in') && password) {
         onLoginSuccess('student');
       } else {
         setMessage('Invalid Student credentials.');
@@ -33,60 +33,83 @@ function AuthPage({ onLoginSuccess }) {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <FaGraduationCap style={{ fontSize: '50px', color: 'var(--color-accent-blue)', marginBottom: '15px' }} />
-        <h1>Question Paper Library</h1>
-        <p className="description">Access your academic resources</p>
+    <div className="auth-layout">
+      {/* The wrapper is now just one column */}
+      <div className="auth-card-wrapper">
 
-        <div className="auth-toggle">
-          <button
-            className={`auth-toggle-button ${isLoginAsAdmin ? 'active' : ''}`}
-            onClick={() => setIsLoginAsAdmin(true)}
-          >
-            <FaUserShield /> Admin
-          </button>
-          <button
-            className={`auth-toggle-button ${!isLoginAsAdmin ? 'active' : ''}`}
-            onClick={() => setIsLoginAsAdmin(false)}
-          >
-            <FaUser /> Student
-          </button>
-        </div>
+        {/* --- Single Column for Login --- */}
+        <div className="auth-right-column">
+          
+          {/* --- NEW HEADER --- */}
+          <img src="/gvp-logo.png" alt="College Logo" className="auth-logo-top" />
+          <h1 className="auth-title-top">
+            Gayatri Vidya Parishad College for Degree and P.G. Courses(A)
+          </h1>
+          {/* --- END NEW HEADER --- */}
 
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div className="form-group" style={{ textAlign: 'left' }}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group" style={{ textAlign: 'left' }}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+          <p className="description">Sign in to access the question paper archive</p>
+
+          <div className="auth-toggle">
+            <button
+              className={`auth-toggle-button ${isLoginAsAdmin ? 'active' : ''}`}
+              onClick={() => setIsLoginAsAdmin(true)}
+            >
+              <FaUserShield /> Admin
+            </button>
+            <button
+              className={`auth-toggle-button ${!isLoginAsAdmin ? 'active' : ''}`}
+              onClick={() => setIsLoginAsAdmin(false)}
+            >
+              <FaUser /> Student
+            </button>
           </div>
 
-          <button type="submit" className="button button-primary button-fullwidth" style={{ marginTop: '10px' }}>
-            {isLoginAsAdmin ? 'Sign in as Admin' : 'Sign in as Student'}
-          </button>
-          {message && (
-            <div className={`message ${isError ? 'error' : 'success'}`}>
-              {message}
+          <form onSubmit={handleLogin}>
+            <div className="form-group">
+              <label htmlFor="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
-          )}
-        </form>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <button type="submit" className="button button-primary button-fullwidth" style={{ marginTop: '10px' }}>
+              Sign In
+            </button>
+
+            {message && (
+              <div className={`message ${isError ? 'error' : 'success'}`}>
+                {message}
+              </div>
+            )}
+          </form>
+
+          <div className="demo-credentials">
+            <strong>Demo Credentials</strong>
+            <p><b>Admin:</b> admin@questionpaper.com / admin123</p>
+            <p><b>Student:</b> Use your @gvpcdpgc.edu.in email</p>
+          </div>
+
+          <p className="register-link">
+            New student? <a href="#!">Register here</a>
+          </p>
+
+        </div>
       </div>
     </div>
   );

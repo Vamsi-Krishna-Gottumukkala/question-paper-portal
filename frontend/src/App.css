@@ -3,22 +3,17 @@
 /* 1. Root Variables & Font */
 :root {
   --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  
-  --color-bg-deep: #11151c;        /* Deepest background */
-  --color-bg-primary: #1a1e28;     /* Main content background */
-  --color-bg-secondary: #222732;   /* Card background */
-  --color-border: #3e4451;        /* Borders, dividers */
-  
-  --color-text-light: #f0f4f8;     /* Main text */
-  --color-text-muted: #8a96a3;     /* Labels, descriptions */
-  
+  --color-bg-deep: #11151c;
+  --color-bg-primary: #1a1e28;
+  --color-bg-secondary: #222732;
+  --color-border: #3e4451;
+  --color-text-light: #f0f4f8;
+  --color-text-muted: #8a96a3;
   --color-accent-blue: #00aaff;
   --color-accent-cyan: #00f2ea;
   --color-accent-gradient: linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-cyan));
-  
   --color-danger: #e74c3c;
   --color-success: #2ecc71;
-  
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
   --border-radius: 10px;
@@ -29,7 +24,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-primary);
-  background-color: var(--color-bg-deep);
+  background-color: var(--color-bg-deep); 
   color: var(--color-text-light);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -39,29 +34,31 @@ body {
   box-sizing: border-box;
 }
 
-/* 3. Main App Layout */
+/* 3. Main App Layout (Logged-In) */
 .app-container {
   display: flex;
-  flex-direction: column; /* Stack Navbar on top of the layout */
+  flex-direction: column;
   height: 100vh;
+  background-color: var(--color-bg-deep);
+  color: var(--color-text-light);
 }
 
 .app-layout {
   display: flex;
-  flex: 1; /* This layout (sidebar + content) takes the remaining height */
-  overflow: hidden; /* Prevent double scrollbars */
+  flex: 1; 
+  overflow: hidden;
 }
 
 .main-content {
   flex: 1;
   padding: 30px;
   background-color: var(--color-bg-primary);
-  overflow-y: auto; /* This content area will scroll */
-  height: calc(100vh - 70px); /* Full height minus the navbar */
+  overflow-y: auto;
+  height: calc(100vh - 70px);
 }
 
-/* 4. Auth/Login Page */
-.auth-container {
+/* 4. Auth/Login Page (SINGLE CARD STYLES) */
+.auth-layout {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,46 +66,69 @@ body {
   padding: 20px;
 }
 
-.auth-card {
-  background: var(--color-bg-secondary);
-  padding: 40px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
+.auth-card-wrapper {
+  /* REMOVED: display: flex */
   width: 100%;
-  max-width: 450px;
-  text-align: center;
+  max-width: 500px; /* UPDATED: Smaller width for a single column */
+  background: var(--color-bg-secondary); 
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
-.auth-card h1 {
-  font-size: 26px;
-  font-weight: 600;
-  margin-top: 15px;
-  margin-bottom: 5px;
+/* REMOVED: .auth-left-column styles */
+
+/* UPDATED: Styles for the single login column */
+.auth-right-column {
+  padding: 40px 50px; /* Adjusted padding */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   color: var(--color-text-light);
+  text-align: center; /* Center the new header */
 }
 
-.auth-card .description {
+/* NEW: Styles for the logo and title at the top */
+.auth-logo-top {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 15px auto;
+}
+.auth-title-top {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--color-text-light);
+  line-height: 1.4;
+  margin: 0 0 10px 0;
+}
+/* END NEW STYLES */
+
+.auth-right-column h2 {
+  /* This was "Welcome Back", now removed */
+  display: none; 
+}
+.auth-right-column .description {
+  font-size: 16px;
   color: var(--color-text-muted);
   margin-bottom: 30px;
+  text-align: center; /* Ensure this is centered */
 }
-
 .auth-toggle {
   display: flex;
+  border: 1px solid var(--color-border);
   background: var(--color-bg-primary);
   border-radius: 8px;
-  padding: 4px;
   margin-bottom: 25px;
+  overflow: hidden;
 }
-
 .auth-toggle-button {
   flex: 1;
   background: transparent;
   border: none;
   color: var(--color-text-muted);
-  padding: 12px;
+  padding: 14px;
   font-size: 15px;
   font-weight: 500;
-  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   display: flex;
@@ -116,67 +136,111 @@ body {
   justify-content: center;
   gap: 8px;
 }
-
 .auth-toggle-button.active {
-  background: var(--color-accent-gradient);
+  background: var(--color-accent-gradient); 
   color: #fff;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0, 170, 255, 0.2); 
+}
+.auth-toggle-button:not(.active) + .auth-toggle-button {
+  border-left: 1px solid var(--color-border);
 }
 
-/* 5. General Components (Card, Button, Form) */
-.card {
-  background: var(--color-bg-secondary);
-  padding: 25px 30px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 30px;
+.auth-right-column .form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+.auth-right-column .form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  display: block;
+}
+.auth-right-column input[type="email"],
+.auth-right-column input[type="password"] {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  color: var(--color-text-light);
+  font-size: 15px;
+  font-family: var(--font-primary);
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.auth-right-column input:focus {
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 0 3px rgba(0, 170, 255, 0.2); 
+  outline: none;
+}
+.auth-right-column input::placeholder {
+  color: var(--color-text-muted);
 }
 
-.card-header {
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 15px;
-  margin-bottom: 25px;
+.auth-right-column .button-primary {
+  background: var(--color-accent-gradient); 
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 170, 255, 0.2); 
+}
+.auth-right-column .button-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 6px 15px rgba(0, 170, 255, 0.3);
 }
 
-.card-header h2 {
-  font-size: 22px;
+.demo-credentials {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-top: 25px;
+  text-align: left;
+}
+.demo-credentials strong {
   font-weight: 600;
   color: var(--color-text-light);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: block;
+  margin-bottom: 8px;
 }
-
-.card-header p {
+.demo-credentials p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0 0 5px 0;
+  line-height: 1.5;
+}
+.register-link {
+  margin-top: 20px;
   font-size: 15px;
   color: var(--color-text-muted);
-  margin: 5px 0 0;
+  text-align: center;
+}
+.register-link a {
+  color: var(--color-accent-blue);
+  font-weight: 500;
+  text-decoration: none;
+}
+.register-link a:hover {
+  text-decoration: underline;
 }
 
+/* --- (Rest of your app's styles: .form-grid, .card, .button, etc.) --- */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px 25px;
 }
-
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-
 .form-group label {
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text-muted);
 }
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-select {
+.main-content input[type="text"],
+.main-content input[type="number"],
+.main-content select {
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: 8px;
@@ -186,17 +250,42 @@ select {
   font-family: var(--font-primary);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
-input::placeholder {
+.main-content input::placeholder {
   color: var(--color-text-muted);
   opacity: 0.7;
 }
-
-input:focus,
-select:focus {
+.main-content input:focus,
+.main-content select:focus {
   outline: none;
   border-color: var(--color-accent-blue);
   box-shadow: 0 0 0 3px rgba(0, 170, 255, 0.2);
+}
+
+.card {
+  background: var(--color-bg-secondary);
+  padding: 25px 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 30px;
+}
+.card-header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+.card-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text-light);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.card-header p {
+  font-size: 15px;
+  color: var(--color-text-muted);
+  margin: 5px 0 0;
 }
 
 .button {
@@ -214,28 +303,23 @@ select:focus {
   transition: all 0.2s ease;
   text-decoration: none;
 }
-
 .button-primary {
   background: var(--color-accent-gradient);
   color: #fff;
   box-shadow: 0 4px 10px rgba(0, 170, 255, 0.2);
 }
-
 .button-primary:hover {
   opacity: 0.85;
   box-shadow: 0 6px 15px rgba(0, 170, 255, 0.3);
 }
-
 .button-secondary {
   background: var(--color-bg-secondary);
   color: var(--color-text-light);
   border: 1px solid var(--color-border);
 }
-
 .button-secondary:hover {
   background: var(--color-border);
 }
-
 .button-danger {
   background: var(--color-danger);
   color: #fff;
@@ -243,7 +327,6 @@ select:focus {
 .button-danger:hover {
   opacity: 0.8;
 }
-
 .button-fullwidth {
   width: 100%;
   padding-top: 14px;
@@ -397,42 +480,42 @@ select:focus {
 }
 
 /* 11. Responsive Media Queries */
+@media (max-width: 900px) {
+  /* REMOVED: .auth-left-column rule */
+  .auth-card-wrapper {
+    /* UPDATED: This is now the default, but we keep it */
+    flex-direction: column;
+    max-width: 500px;
+    background: var(--color-bg-secondary); 
+  }
+  .auth-right-column {
+    padding: 30px; /* Adjusted padding for mobile */
+  }
+}
+
 @media (max-width: 768px) {
   .main-content {
     padding: 15px;
-    height: calc(100vh - 60px); /* Adjust for smaller navbar */
+    height: calc(100vh - 60px); 
   }
-
   .card {
     padding: 20px;
   }
-
   .card-header h2 {
     font-size: 20px;
   }
   .card-header p {
     font-size: 14px;
   }
-
   .form-grid {
-    /* Stack form elements */
     grid-template-columns: 1fr;
   }
-
-  /* Make tables horizontally scrollable */
   .table-container {
     overflow-x: auto;
   }
   .responsive-table {
-    min-width: 600px; /* Force table to be wide */
+    min-width: 600px;
   }
-
-  .auth-card {
-    padding: 20px;
-    margin: 15px;
-    width: 100%;
-  }
-
   .results-list-item {
     flex-direction: column;
     align-items: flex-start;
